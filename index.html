@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link href="src/output.css" rel="stylesheet">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/128/781/781831.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        #transactionsHistory::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #transactionsHistory::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+
+        #transactionsHistory::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+
+        #transactionsHistory::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+
+<body class="text-slate-700 overflow-x-hidden select-none bg-slate-300/40 relative min-h-screen">
+
+    <aside id="sidebar" aria-label="Primary Navigation"
+        class="fixed top-0 left-0 h-full w-52 bg-[#f8fafc]/80 backdrop-blur-md border-r border-slate-200/80 z-50 p-6 flex flex-col gap-6 transition-transform duration-500 ease-in-out -translate-x-full shadow-2xl shadow-slate-300/30">
+
+        <div class="flex justify-between items-center pb-4 h-16 border-b border-b-slate-900">
+            <div class="flex items-center gap-2">
+                <img src="https://cdn-icons-png.flaticon.com/128/781/781831.png" alt="Logo" draggable="false"
+                    class="w-8 h-8 object-contain shrink-0">
+                <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Tracker</h1>
+            </div>
+            <button id="closeSidebarBtn" aria-label="Close Sidebar"
+                class="text-slate-400 hover:text-rose-500 transition-colors duration-200 cursor-pointer text-lg">
+                <span aria-hidden="true">✕</span>
+            </button>
+        </div>
+
+        <nav class="flex flex-col gap-1.5">
+            <a href="#overview"
+                class="nav-item selectAllTransactions flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-all duration-300 ease-in-out bg-blue-100 text-blue-600 font-medium shadow-sm">
+                <img src="https://cdn-icons-png.flaticon.com/128/18096/18096353.png" alt="Dashboard" draggable="false"
+                    class="w-5 h-5 object-contain transition-all duration-300" />
+                <span>Dashboard</span>
+            </a>
+            <a href="#transactions" id="selectAllIncome"
+                class="nav-item selectAllTransactions flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm transition-all duration-300 ease-in-out">
+                <img src="https://img.icons8.com/ios-filled/50/40C057/positive-dynamic.png" alt="Income"
+                    draggable="false" class="w-5 h-5 object-contain" />
+                <span>All Income</span>
+            </a>
+            <a href="#transactions" id="selectAllExpense"
+                class="nav-item selectAllTransactions flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm transition-all duration-300 ease-in-out">
+                <img src="https://img.icons8.com/ios-filled/50/FA5252/negative-dynamic.png" alt="Expenses"
+                    draggable="false" class="w-5 h-5 object-contain" />
+                <span>All Expenses</span>
+            </a>
+
+            <a href="#transactions"
+                class="nav-item viewAllBtn selectAllTransactions flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200 hover:text-slate-900 rounded-lg text-sm transition-all duration-300 ease-in-out">
+                <img src="https://cdn-icons-png.flaticon.com/128/1751/1751805.png" alt="All Transactions"
+                    draggable="false" class="w-5 h-5 object-contain transition-all duration-300" />
+                <span>Transactions</span>
+            </a>
+        </nav>
+
+        <button type="button" id="clearAllData"
+            class="flex justify-center items-center gap-2 bg-rose-600 rounded-xl text-white font-semibold px-3 py-2 text-sm hover:bg-rose-500 transition-colors ease-in-out active:scale-95 cursor-pointer mt-auto w-full">
+            <img src="https://img.icons8.com/parakeet-line/48/ffffff/filled-trash.png" alt="Clear Data"
+                class="w-4 h-4 object-contain shrink-0">
+            <span>Clear Data</span>
+        </button>
+    </aside>
+
+    <div id="mainContent" class="transition-all duration-500 ease-in-out">
+        <header class="sticky top-0 z-30 bg-[#f8fafc]/80 backdrop-blur-md py-3 border-b border-slate-200/60">
+            <nav class="h-16 px-4 md:pl-6 md:pr-8 flex items-center justify-between relative">
+                <div class="flex items-center justify-center">
+                    <button id="sidebarToggleBtn" aria-label="Open Sidebar"
+                        class="text-2xl hover:text-indigo-600 transition text-slate-600 select-none p-2 rounded-lg hover:bg-slate-100">
+                        ☰
+                    </button>
+                </div>
+
+                <h1 class="flex-1 text-center text-xl md:text-3xl font-bold text-slate-950 tracking-tight">
+                    Expense Tracker
+                </h1>
+
+                <div class="w-8 md:hidden"></div>
+
+                <div class="hidden md:flex justify-center items-center gap-3">
+                    <button id="addIncomeDesktop"
+                        class="bg-emerald-600 border border-emerald-500/10 text-white py-2.5 px-5 rounded-xl text-sm font-semibold hover:bg-emerald-500 active:scale-95 transition-all duration-300 shadow-md shadow-emerald-600/10 cursor-pointer">
+                        + Add Income
+                    </button>
+                    <button id="addExpenseDesktop"
+                        class="bg-rose-600 border border-rose-500/10 text-white py-2.5 px-5 rounded-xl text-sm font-semibold hover:bg-rose-500 active:scale-95 transition-all duration-300 shadow-md shadow-rose-600/10 cursor-pointer">
+                        + Add Expense
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="flex flex-col justify-center items-center p-6 max-w-7xl mx-auto w-full relative">
+            <section id="overview" class="flex w-full flex-col gap-5 items-center justify-center lg:flex-row">
+
+                <!-- Total Income Card -->
+                <div
+                    class="w-full flex items-center gap-4 p-5 bg-emerald-100/40 border rounded-lg shadow-sm shadow-slate-200/40 hover:-translate-y-1 border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-600/5 transition-all duration-300">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2936/2936758.png" draggable="false"
+                        alt="Income Icon" class="w-12 bg-green-200 p-1 rounded-lg h-12 object-contain">
+                    <div class="flex flex-col min-w-0">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Total
+                            Income</span>
+                        <h2 id="totalIncome" class="text-2xl text-emerald-600 font-extrabold whitespace-nowrap mt-0.5">₹
+                            0</h2>
+                    </div>
+                </div>
+
+                <!-- Total Expenses Card -->
+                <div
+                    class="w-full flex items-center gap-4 p-5 bg-rose-100/40 border rounded-lg shadow-sm shadow-slate-200/40 hover:-translate-y-1 border-rose-500/30 hover:shadow-lg hover:shadow-rose-600/5 transition-all duration-300">
+                    <img src="https://cdn-icons-png.flaticon.com/128/8733/8733406.png" draggable="false"
+                        alt="Expenses Icon" class="p-1 w-12 h-12 bg-red-200 rounded-lg object-contain">
+                    <div class="flex flex-col min-w-0">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider truncate">Total
+                            Expenses</span>
+                        <h2 id="totalExpense" class="text-2xl text-rose-600 font-extrabold whitespace-nowrap mt-0.5">₹
+                            0</h2>
+                    </div>
+                </div>
+
+                <!-- Total Balance Card -->
+                <div
+                    class="w-full flex items-center gap-4 p-5 bg-indigo-100/40 border rounded-lg shadow-sm shadow-slate-200/40 hover:-translate-y-1 border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-600/5 transition-all duration-300">
+                    <img src="https://cdn-icons-png.flaticon.com/128/6140/6140123.png" draggable="false"
+                        alt="Balance Icon" class="w-12 h-12 object-contain p-1 bg-indigo-200 rounded-lg">
+                    <div class="flex flex-col min-w-0">
+                        <span class="text-xs font-semibold text-indigo-500 uppercase tracking-wider truncate">Total
+                            Balance</span>
+                        <h2 id="totalBalance" class="text-2xl text-indigo-600 font-extrabold whitespace-nowrap mt-0.5">₹
+                            0</h2>
+                    </div>
+                </div>
+            </section>
+
+            <section id="manager"
+                class="flex flex-col sm:flex-row justify-center items-center gap-3 w-full mt-5 md:hidden">
+                <button id="addIncomeMobile"
+                    class="w-full bg-emerald-600 text-white py-3.5 px-4 rounded-xl text-base font-semibold hover:bg-emerald-500 active:scale-95 transition-all duration-300 shadow-md shadow-emerald-600/10 cursor-pointer">+
+                    Add Income</button>
+                <button id="addExpenseMobile"
+                    class="w-full bg-rose-600 text-white py-3.5 px-4 rounded-xl text-base font-semibold hover:bg-rose-500 active:scale-95 transition-all duration-300 shadow-md shadow-rose-600/10 cursor-pointer">+
+                    Add Expense</button>
+            </section>
+
+            <div id="modalWrapper" class="w-full">
+                <section id="transactions"
+                    class="bg-white flex items-center flex-col p-6 mt-6 rounded-2xl border border-slate-200/80 shadow-md shadow-slate-200/30 w-full min-h-96 select-none transition-all duration-300">
+
+                    <div class="flex flex-col md:flex-row justify-between w-full pb-5 gap-4 shrink-0">
+                        <h1 id="tableTitle" class="text-xl font-bold text-slate-950 tracking-tight">Recent
+                            Transactions
+                        </h1>
+                        <div class="flex justify-between md:gap-3">
+                            <div class="relative inline-block w-auto">
+                                <select id="sortBy"
+                                    class="w-auto appearance-none text-sm border border-slate-200 rounded-lg pl-4 pr-9 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-600 cursor-pointer bg-slate-50/80">
+                                    <option value="Descdate" class="bg-white text-slate-900">Date (Newest)</option>
+                                    <option value="Ascdate" class="bg-white text-slate-900">Date (Oldest)</option>
+                                    <option value="Descamount" class="bg-white text-slate-900">Amount (Highest)</option>
+                                    <option value="Ascamount" class="bg-white text-slate-900">Amount (Lowest)</option>
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center">
+                                <a href="#" id="viewAllBtn"
+                                    class="viewAllBtn text-indigo-600 hover:text-indigo-500 font-bold transition-all text-sm">View
+                                    All
+                                </a>
+                                <button id="closeModalBtn"
+                                    class="hidden text-rose-600 hover:text-rose-800 font-semibold transition-all text-sm">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full shrink-0">
+                        <ul
+                            class="text-slate-400 font-semibold grid grid-cols-[1.2fr_1fr_1.2fr_30px] md:grid-cols-[1fr_1.5fr_1fr_1fr_1fr_30px] border-b border-t border-slate-100 py-3 px-3 items-center text-xs tracking-wider uppercase">
+                            <li>Date</li>
+                            <li class="hidden md:block">Description</li>
+                            <li>Type</li>
+                            <li class="hidden md:block">Category</li>
+                            <li>Amount</li>
+                            <li></li>
+                        </ul>
+                    </div>
+
+                    <div id="transactionsHistory"
+                        class="w-full flex flex-col py-2 items-center text-sm text-slate-600 h-96 max-h-96 overflow-hidden pr-1">
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <section id="modalOverlay"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex justify-center items-center p-6 hidden">
+
+        <!-- Income Modal -->
+        <div id="incomeModal"
+            class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 flex flex-col justify-between hidden">
+
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3.5">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100/50 flex items-center justify-center shrink-0">
+                        <img src="https://img.icons8.com/ios-filled/50/40C057/positive-dynamic.png" alt="Add Income"
+                            draggable="false" class="w-8 aspect-square object-contain">
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Add Income</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Add a new income entry</p>
+                    </div>
+                </div>
+                <button class="close-modal-btn text-slate-400 text-2xl hover:text-slate-600 transition-colors">
+                    ✕
+                </button>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div class="flex flex-col gap-1.5">
+                    <label for="IncDate" class="text-xs font-semibold text-slate-400 uppercase">Date</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                        </span>
+                        <input type="date" id="IncDate"
+                            class="w-full text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="IncDesc" class="text-xs font-semibold text-slate-400 uppercase">Description</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                        </span>
+                        <input type="text" id="IncDesc" placeholder="Enter description"
+                            class="w-full text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder-slate-400">
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="IncCat" class="text-xs font-semibold text-slate-400 uppercase">Category</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-19.5 0A2.25 2.25 0 0 0 2.25 15v2.25m0-4.5A2.25 2.25 0 0 1 4.5 10.5h15a2.25 2.25 0 0 1 2.25 2.25m0-2.25V12a2.25 2.25 0 0 0-2.25-2.25h-15A2.25 2.25 0 0 0 2.25 12v3m19.5 0A2.25 2.25 0 0 1 19.5 17.25h-15A2.25 2.25 0 0 1 2.25 15v2.25C2.25 18.496 3.504 19.5 5 19.5h14c1.496 0 2.75-1.004 2.75-2.25V15Z" />
+                            </svg>
+                        </span>
+                        <select id="IncCat"
+                            class="w-full appearance-none text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-10 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all cursor-pointer">
+                            <option class="bg-white text-slate-900">Salary</option>
+                            <option class="bg-white text-slate-900">Freelance</option>
+                            <option class="bg-white text-slate-900">Investments</option>
+                            <option class="bg-white text-slate-900">Bonus</option>
+                            <option class="bg-white text-slate-900">Others</option>
+                        </select>
+                        <span class="absolute right-3.5 text-slate-400 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="IncAmt" class="text-xs font-semibold text-slate-400 uppercase">Amount</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-4 text-lg font-semibold text-slate-400 pointer-events-none">₹</span>
+                        <input type="number" step="500" id="IncAmt" placeholder="Enter amount"
+                            class="w-full text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all cursor-pointer placeholder-slate-400">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button
+                    class="close-modal-btn flex-1 py-3 border border-slate-200 hover:bg-slate-50 text-slate-500 text-sm font-semibold rounded-xl transition-all active:scale-95">
+                    Cancel
+                </button>
+                <button id="JSaddIncome"
+                    class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/10 active:scale-95">
+                    Add Income
+                </button>
+            </div>
+        </div>
+
+        <!-- Expense Modal -->
+        <div id="expenseModal"
+            class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 flex flex-col justify-between hidden">
+
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-3.5">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-rose-50 border border-rose-100/50 flex items-center justify-center shrink-0">
+                        <img src="https://img.icons8.com/ios-filled/50/FA5252/negative-dynamic.png" alt="Add Expense"
+                            draggable="false" class="w-8 aspect-square object-contain">
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Add Expense</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Add a new expense entry</p>
+                    </div>
+                </div>
+                <button class="close-modal-btn text-slate-400 text-2xl hover:text-slate-600 transition-colors">
+                    ✕
+                </button>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div class="flex flex-col gap-1.5">
+                    <label for="ExpDate" class="text-xs font-semibold text-slate-400 uppercase">Date</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                        </span>
+                        <input type="date" id="ExpDate"
+                            class="w-full text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all">
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="ExpDesc" class="text-xs font-semibold text-slate-400 uppercase">Description</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                            </svg>
+                        </span>
+                        <input type="text" id="ExpDesc" placeholder="Enter description"
+                            class="w-full text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all placeholder-slate-400">
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="ExpCat" class="text-xs font-semibold text-slate-400 uppercase">Category</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-3.5 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                            </svg>
+                        </span>
+                        <select id="ExpCat"
+                            class="w-full appearance-none text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-10 py-3 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all cursor-pointer">
+                            <option class="bg-white text-slate-900">Food</option>
+                            <option class="bg-white text-slate-900">Rent</option>
+                            <option class="bg-white text-slate-900">Utilities</option>
+                            <option class="bg-white text-slate-900">Entertainment</option>
+                            <option class="bg-white text-slate-900">EMI Payment</option>
+                            <option class="bg-white text-slate-900">Subscription</option>
+                            <option class="bg-white text-slate-900">Recharge</option>
+                            <option class="bg-white text-slate-900">Others</option>
+                        </select>
+                        <span class="absolute right-3.5 text-slate-400 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="ExpAmt" class="text-xs font-semibold text-slate-400 uppercase">Amount</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-4 text-lg font-semibold text-slate-400 pointer-events-none">₹</span>
+                        <input type="number" step="500" id="ExpAmt" placeholder="Enter amount"
+                            class="w-full text-sm text-slate-900 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all cursor-pointer placeholder-slate-400">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button
+                    class="close-modal-btn flex-1 py-3 border border-slate-200 hover:bg-slate-50 text-slate-500 text-sm font-semibold rounded-xl transition-all active:scale-95">
+                    Cancel
+                </button>
+                <button id="JSaddExpense"
+                    class="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-rose-600/10 active:scale-95">
+                    Add Expense
+                </button>
+            </div>
+        </div>
+
+        <!-- Delete Data Warning Modal -->
+        <div id="clearDataModal"
+            class="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 p-6 flex flex-col gap-5 justify-center items-center">
+            <div class="p-3 bg-rose-50 rounded-full">
+                <img src="https://img.icons8.com/plasticine/100/filled-trash.png" alt="Delete All Data"
+                    draggable="false" class="w-16 h-16 object-contain">
+            </div>
+            <h1 class="text-xl font-bold text-slate-900">Delete All Data?</h1>
+            <p class="text-slate-500 text-center text-sm leading-relaxed">This action will permanently delete
+                all your income, expenses, and transaction history. This cannot be undone.</p>
+
+            <div
+                class="bg-rose-50 border border-rose-100 rounded-xl px-4 py-2.5 flex justify-center items-center gap-2 w-full">
+                <img src="https://img.icons8.com/color/48/high-importance--v1.png" alt="Warning" draggable="false"
+                    class="w-5 h-5">
+                <p class="text-rose-600 font-semibold text-xs">This action cannot be undone.</p>
+            </div>
+
+            <div class="flex justify-center gap-3 w-full">
+                <button
+                    class="close-modal-btn px-5 py-3 flex-1 rounded-xl font-semibold bg-transparent border border-slate-200 hover:bg-slate-50 transition-all text-slate-500 text-sm active:scale-95">
+                    Cancel
+                </button>
+                <button id="JSclearAllData"
+                    class="px-5 py-3 flex-1 bg-rose-600 font-semibold rounded-xl hover:bg-rose-500 transition-all text-white text-sm active:scale-95">
+                    Delete All Data
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script src="JS/app-UI.js"></script>
+    <script src="JS/calculation.js"></script>
+    <script src="JS/storage.js"></script>
+</body>
+
+</html>
