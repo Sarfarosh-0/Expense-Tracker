@@ -198,6 +198,7 @@ closeModalBtn.addEventListener("click", () => {
 const printPdfBtn = document.getElementById("printPdfBtn");
 
 if (printPdfBtn) {
+  tableTitle.textContent = "All Transactions";
   printPdfBtn.addEventListener("click", () => {
     window.print();
   });
