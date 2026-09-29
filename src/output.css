@@ -1209,7 +1209,7 @@
   }
 }
 @media print {
-  #sidebar, header, #overview, #manager, #modalOverlay, #sortBy, .viewAllBtn, #closeModalBtn, #printPdfBtn {
+  #sidebar, header, #overview, #manager, #modalOverlay, #sortIcon, #sortBy, .viewAllBtn, #closeModalBtn, #printPdfBtn {
     display: none !important;
   }
   body {
@@ -1225,6 +1225,19 @@
     max-height: none !important;
     height: auto !important;
     overflow: visible !important;
+  }
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+  #transactionsHistory li.hidden, #modalWrapper ul li.hidden {
+    display: block !important;
+  }
+  #transactionsHistory img {
+    display: none !important;
+  }
+  #modalWrapper ul, #transactionsHistory ul {
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr !important;
   }
   * {
     -webkit-print-color-adjust: exact !important;
