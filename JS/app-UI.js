@@ -196,10 +196,19 @@ closeModalBtn.addEventListener("click", () => {
 });
 
 const printPdfBtn = document.getElementById("printPdfBtn");
+const printPdfBtnMobile = document.getElementById("printPdfBtnMobile");
 
 if (printPdfBtn) {
   tableTitle.textContent = "All Transactions";
   printPdfBtn.addEventListener("click", () => {
+    window.print();
+  });
+}
+
+if (printPdfBtnMobile) {
+  tableTitle.textContent = "All Transactions";
+  printPdfBtnMobile
+  .addEventListener("click", () => {
     window.print();
   });
 }
