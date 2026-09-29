@@ -1,1 +1,59 @@
 @import "tailwindcss";
+
+@media print {
+
+    #sidebar,
+    header,
+    #overview,
+    #manager,
+    #modalOverlay,
+    #sortIcon,
+    #sortBy,
+    .viewAllBtn,
+    #closeModalBtn,
+    #printPdfBtn {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    #mainContent,
+    main {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+
+    #transactionsHistory {
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    @page {
+        size: landscape;
+        margin: 1cm;
+    }
+
+    #transactionsHistory li.hidden,
+    #modalWrapper ul li.hidden {
+        display: block !important;
+    }
+
+    #transactionsHistory img {
+        display: none !important;
+    }
+
+    #modalWrapper ul,
+    #transactionsHistory ul {
+        grid-template-columns: 1fr 2fr 1fr 1fr 1fr !important;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

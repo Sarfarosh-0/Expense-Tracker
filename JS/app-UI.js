@@ -126,12 +126,34 @@ const tableTitle = document.getElementById("tableTitle");
 const viewAllBtns = document.querySelectorAll(".viewAllBtn");
 const closeModalBtn = document.getElementById("closeModalBtn");
 
-const wrapperModalStyles = ["fixed", "inset-0", "z-[100]", "flex", "items-center", "justify-center", "bg-black/60", "backdrop-blur-sm", "p-4", "opacity-100"];
+const wrapperModalStyles = [
+  "fixed",
+  "inset-0",
+  "z-[100]",
+  "flex",
+  "items-center",
+  "justify-center",
+  "bg-black/60",
+  "backdrop-blur-sm",
+  "p-4",
+  "opacity-100",
+];
 const sectionInlineStyles = ["mt-3", "p-4", "shadow-lg", "min-h-96"];
-const sectionModalStyles = ["flex", "flex-col", "w-full", "max-w-4xl", "max-h-[85vh]", "p-6", "shadow-2xl"];
-const historyInlineStyles = ["md:max-h-[320px]", "max-h-[250px]", "overflow-hidden"];
+const sectionModalStyles = [
+  "flex",
+  "flex-col",
+  "w-full",
+  "max-w-4xl",
+  "max-h-[85vh]",
+  "p-6",
+  "shadow-2xl",
+];
+const historyInlineStyles = [
+  "md:max-h-[320px]",
+  "max-h-[250px]",
+  "overflow-hidden",
+];
 const historyModalStyles = ["flex-grow", "overflow-y-auto"];
-
 
 viewAllBtns.forEach((btn) => {
   btn.addEventListener("click", openAllTransactions);
@@ -150,8 +172,8 @@ function openAllTransactions(e) {
   transactionsHistory.classList.add(...historyModalStyles);
 
   tableTitle.textContent = "All Transactions";
-  viewAllBtns.forEach(btn => btn.classList.add("hidden"));
-  
+  viewAllBtns.forEach((btn) => btn.classList.add("hidden"));
+
   closeModalBtn.classList.remove("hidden");
   document.body.classList.add("overflow-hidden");
 }
@@ -167,8 +189,17 @@ closeModalBtn.addEventListener("click", () => {
   transactionsHistory.classList.add(...historyInlineStyles);
 
   tableTitle.textContent = "Recent Transactions";
-  viewAllBtns.forEach(btn => btn.classList.remove("hidden"));
-  
+  viewAllBtns.forEach((btn) => btn.classList.remove("hidden"));
+
   closeModalBtn.classList.add("hidden");
   document.body.classList.remove("overflow-hidden");
 });
+
+const printPdfBtn = document.getElementById("printPdfBtn");
+
+if (printPdfBtn) {
+  tableTitle.textContent = "All Transactions";
+  printPdfBtn.addEventListener("click", () => {
+    window.print();
+  });
+}
