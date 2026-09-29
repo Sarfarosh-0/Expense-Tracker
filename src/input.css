@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@media print {
+  #sidebar,
+  header,
+  #overview,
+  #manager,
+  #modalOverlay,
+  #sortBy,
+  .viewAllBtn,
+  #closeModalBtn,
+  #printPdfBtn {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  #mainContent, 
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #transactionsHistory {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
