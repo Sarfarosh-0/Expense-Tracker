@@ -3,7 +3,7 @@
 A production-grade, state-driven financial ledger built purely with **vanilla HTML5**, **CSS3**, and modular **ES6+ JavaScript**. This application implements a completely decoupled design architecture, separating database state management, ledger calculations, and visual DOM templating into dedicated Javascript modules.
 
 ### 🔗 Live Production Demo
-🚀 **[Launch Live Application](https://stellar-basbousa-142e5f.netlify.app)**
+🚀 **[Live Application](https://stellar-basbousa-142e5f.netlify.app)**
 
 ---
 
